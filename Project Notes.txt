@@ -1,0 +1,14 @@
+// add remote repo to Visual Studio Code
+git remote add <name> <url>
+
+// add credential manager if using CMD to stop asking for username/password
+git config --global credential.helper cache
+
+// fetch stuff from repo
+git fetch --all
+
+// show 
+git remote -v
+
+// set tracking to origin
+git branch --set-upstream-to=<name>/<branch> master
