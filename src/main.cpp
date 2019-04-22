@@ -11,7 +11,8 @@ Wires for Arduino:
 - Black stripe = Motor B Output
 */
 
-#define DEBUG true
+#define DEBUG_ENCODERS true
+#define PRINT_ENCODERS true
 
 #define Bluetooth Serial2
 #define MotorController Serial1
@@ -370,18 +371,21 @@ unsigned int monitor_time = 18; // in milliseconds
 unsigned long timing;
 long leftMotorEncoderPosition = -999;
 long rightMotorEncoderPosition = -999;
+
 void loop()
 {
   // put your main code here, to run repeatedly:
 
   // handle isr: safety measures for stopping car if not acked
   safetyIsrMotors();
-  
+
   // bluetooth state-machine read data/messages
   bluetoothStateMachine();
 
   // encoders timing
   // encoders timing
+  #if DEBUG_ENCODERS
+  
   if (millis() > timing + monitor_time)
   {
     timing = millis();
@@ -390,12 +394,13 @@ void loop()
     long rightMotorEncoderNewPos = rightMotorEncoder.read();
 
     if (leftMotorEncoderNewPos != leftMotorEncoderPosition ||
-        rightMotorEncoderNewPos != rightMotorEncoderPosition) {
+        rightMotorEncoderNewPos != rightMotorEncoderPosition) 
+    {
 
       leftMotorEncoderPosition = leftMotorEncoderNewPos;
       rightMotorEncoderPosition = rightMotorEncoderNewPos;
       
-      #if DEBUG
+      #if PRINT_ENCODERS
       
       Serial.print(leftMotorEncoderPosition);
       Serial.print(" ");
@@ -404,4 +409,7 @@ void loop()
       #endif
     }
   }
+
+  #endif
+
 }
